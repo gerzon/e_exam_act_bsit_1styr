@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICT G11 Problem Analysis and Java Examination</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://oqwehqvhhdvxjxugdukh.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9xd2VocXZoaGR2eGp4dWdkdWtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc2NTk3MzEsImV4cCI6MjEwMzIzNTczMX0.SidafkMBgTFj9wqqk8nuIYMNbfUpaYVa5WBJUvnYUl4";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+</script>
+
+<style>
+  :root{
+    --sti-blue:#003b7a;
+    --sti-blue-dark:#002b5c;
+    --sti-yellow:#ffc400;
+    --light:#f4f7fb;
+    --text:#1f2937;
+    --border:#d9e1ec;
+    --success:#16803c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--light);
+    color:var(--text);
+    line-height:1.5;
+  }
+  .topbar{height:9px;background:var(--sti-yellow)}
+  header{
+    background:linear-gradient(135deg,var(--sti-blue-dark),var(--sti-blue));
+    color:#fff;padding:28px 20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+  }
+  .header-inner{max-width:1000px;margin:auto}
+  .header-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .brand{font-weight:800;letter-spacing:.5px;color:var(--sti-yellow);font-size:18px}
+  .dashboard-link{display:inline-block;background:var(--sti-yellow);color:var(--sti-blue-dark);padding:9px 13px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none}
+  .dashboard-link:hover{filter:brightness(.95)}
+  h1{margin:7px 0 4px;font-size:28px}
+  .subtitle{margin:0;color:#e9f1ff}
+  .container{max-width:1000px;margin:24px auto;padding:0 15px}
+  .subject-tabs{
+    max-width:1000px;margin:22px auto 0;padding:0 15px;display:flex;gap:10px;flex-wrap:wrap
+  }
+  .tab-button{
+    flex:1 1 180px;border:1px solid var(--border);background:#fff;color:var(--sti-blue-dark);
+    border-radius:10px 10px 0 0;padding:12px 18px;font-weight:700;cursor:pointer;
+    box-shadow:0 -2px 8px rgba(0,0,0,.03)
+  }
+  .tab-button.active{
+    background:var(--sti-blue);color:#fff;border-color:var(--sti-blue);box-shadow:none
+  }
+  .tab-panel{display:none}
+  .tab-panel.active{display:block}
+  .card{
+    background:#fff;border:1px solid var(--border);border-radius:12px;
+    padding:22px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.05)
+  }
+  .section-title{
+    background:var(--sti-blue);color:#fff;padding:12px 15px;border-radius:8px;
+    margin:-22px -22px 20px;font-size:18px;font-weight:700;
+    border-bottom:4px solid var(--sti-yellow)
+  }
+  .meta{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}
+  label{font-weight:700;font-size:14px}
+  input[type=text], input[type=date], textarea{
+    width:100%;margin-top:6px;border:1px solid #bcc8d8;border-radius:7px;
+    padding:11px;font:inherit;background:#fff
+  }
+  .instructions{background:#fff8d9;border-left:5px solid var(--sti-yellow);padding:13px 15px;border-radius:6px}
+  .grading-scale{width:100%;margin-top:14px;border-collapse:collapse;background:#fff}
+  .grading-scale th,.grading-scale td{padding:9px 11px;border:1px solid #e2c75b;text-align:left}
+  .grading-scale th{background:var(--sti-blue);color:#fff}
+  .grading-scale tr:nth-child(even){background:#fffdf0}
+  .question{padding:18px 0;border-bottom:1px solid #e6ebf2}
+  .question:last-child{border-bottom:0}
+  .question-modal{
+    display:none;position:fixed;inset:0;z-index:15;overflow-y:auto;
+    padding:28px 15px;background:rgba(0,43,92,.72)
+  }
+  .question-modal.open{display:block}
+  .question-dialog{
+    width:min(700px,100%);min-height:360px;margin:0 auto;background:#fff;
+    border:1px solid var(--border);border-radius:12px;padding:22px;
+    box-shadow:0 12px 35px rgba(0,0,0,.3)
+  }
+  .question-dialog-header{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin:-22px -22px 15px;padding:14px 18px;background:var(--sti-blue);
+    color:#fff;border-radius:12px 12px 0 0;border-bottom:4px solid var(--sti-yellow)
+  }
+  .question-progress{font-size:14px;font-weight:700}
+  .question-close{background:#e9eef5;color:#253247;padding:8px 13px;font-size:13px}
+  .question-dialog .question{display:block;border:0;padding:12px 0 20px}
+  .question-dialog .question[hidden]{display:none}
+  .question-navigation{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--border);padding-top:16px}
+  .question-navigation button{background:var(--sti-blue);color:#fff}
+  .question-navigation .previous{background:#e9eef5;color:#253247}
+  .question-launch{display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .question-launch p{margin:0;color:#667085}
+  .open-questions{background:var(--sti-blue);color:#fff}
+  .qtext{font-weight:700;margin-bottom:11px}
+  .option{
+    display:block;padding:9px 11px;margin:6px 0;border:1px solid transparent;
+    border-radius:7px;cursor:pointer
+  }
+  .option:hover{background:#eef5ff;border-color:#c7d9f2}
+  .option input{margin-right:9px}
+  .essay textarea{min-height:150px;resize:vertical}
+  .points{font-size:12px;color:#667085;font-weight:normal}
+  .actions{display:flex;gap:10px;flex-wrap:wrap}
+  button{
+    border:0;border-radius:8px;padding:13px 20px;font-weight:700;cursor:pointer;
+    font-size:15px
+  }
+  .submit{background:var(--sti-blue);color:#fff}
+  .reset{background:#e9eef5;color:#253247}
+  button:hover{opacity:.92}
+  #result{
+    display:none;position:fixed;inset:0;z-index:10;overflow-y:auto;
+    margin:0;padding:28px 15px;background:rgba(0,43,92,.55)
+  }
+  .result-dialog{
+    max-width:1000px;margin:auto;background:#fff;border:1px solid var(--border);
+    border-radius:12px;padding:22px;box-shadow:0 12px 35px rgba(0,0,0,.25)
+  }
+  .result-close{float:right;background:#e9eef5;color:#253247;padding:8px 13px}
+  .score{
+    font-size:30px;font-weight:800;color:var(--sti-blue);margin:5px 0
+  }
+  .success{color:var(--success);font-weight:700}
+  .warning{color:#8a5a00}
+  .review{margin-top:15px}
+  .wrong{background:#fff0f0;border-left:4px solid #c62828;padding:9px;margin:5px 0}
+  .correct{background:#eefaf1;border-left:4px solid var(--success);padding:9px;margin:5px 0}
+  .option.answer-correct{background:#eefaf1;border-color:var(--success)}
+  .option.answer-wrong{background:#fff0f0;border-color:#c62828}
+  .loadingScreen{
+    position:fixed;inset:0;z-index:30;display:grid;place-items:center;
+    padding:20px;background:var(--sti-blue-dark);color:#fff
+  }
+  .loading-dialog{text-align:center}
+  .loading-spinner{
+    width:76px;height:76px;margin:0 auto 18px;border:8px solid rgba(255,255,255,.28);
+    border-top-color:var(--sti-yellow);border-radius:50%;animation:spin 1s linear infinite
+  }
+  .loading-dialog p{margin:0;font-weight:700}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #submissionLoading{display:none;z-index:40}
+  #welcomeScreen{
+    position:fixed;inset:0;z-index:20;display:none;place-items:center;
+    padding:20px;background:rgba(0,43,92,.92);color:#fff
+  }
+  #fullscreenScreen{
+    position:fixed;inset:0;z-index:50;display:none;place-items:center;
+    padding:20px;background:rgba(0,43,92,.96);color:#fff
+  }
+  #pageLeaveScreen{
+    position:fixed;inset:0;z-index:60;display:none;place-items:center;
+    padding:20px;background:rgba(0,43,92,.98);color:#fff
+  }
+  .welcome-dialog{
+    width:min(560px,100%);text-align:center;background:#fff;color:var(--text);
+    border-top:7px solid var(--sti-yellow);border-radius:12px;padding:34px 28px;
+    box-shadow:0 12px 35px rgba(0,0,0,.28)
+  }
+  .welcome-dialog h2{margin:0 0 8px;color:var(--sti-blue);font-size:27px}
+  .welcome-dialog p{margin:8px 0 22px}
+  .welcome-dialog button{background:var(--sti-blue);color:#fff}
+  .loading-message{color:#667085;font-size:14px}
+  footer{text-align:center;padding:25px;color:#667085;font-size:13px}
+  @media(max-width:700px){
+    .header-row{align-items:flex-start;flex-direction:column;gap:10px}
+    .meta{grid-template-columns:1fr}
+    h1{font-size:22px}
+    .card{padding:16px}
+    .section-title{margin:-16px -16px 16px}
+  }
+  @media print{
+    .actions,#result{display:none!important}
+    body{background:#fff}
+    .card{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+<section id="loadingScreen" class="loadingScreen" role="status" aria-live="polite">
+  <div class="loading-dialog">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <p>Loading examination...</p>
+  </div>
+</section>
+<section id="submissionLoading" class="loadingScreen" role="status" aria-live="polite">
+  <div class="loading-dialog">
+    <div class="loading-spinner" aria-hidden="true"></div>
+    <p>Submitting your examination...</p>
+  </div>
+</section>
+<section id="welcomeScreen" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+  <div class="welcome-dialog">
+    <h2 id="welcomeTitle">Welcome to the Examination</h2>
+    <p class="loading-message" id="loadingMessage">Preparing your randomized multiple-choice questions...</p>
+    <button id="startExam" type="button" disabled>Loading...</button>
+  </div>
+</section>
+<section id="fullscreenScreen" role="dialog" aria-modal="true" aria-labelledby="fullscreenTitle">
+  <div class="welcome-dialog">
+    <h2 id="fullscreenTitle">Fullscreen Required</h2>
+    <p class="loading-message">The examination is paused because fullscreen mode was exited. Return to fullscreen to continue.</p>
+    <button id="returnFullscreen" type="button">Return to Fullscreen</button>
+  </div>
+</section>
+<section id="pageLeaveScreen" role="dialog" aria-modal="true" aria-labelledby="pageLeaveTitle">
+  <div class="welcome-dialog">
+    <h2 id="pageLeaveTitle">Examination Paused</h2>
+    <p class="loading-message">You left the examination page or minimized the window. Return to this page and fullscreen mode to continue.</p>
+    <button id="returnPage" type="button">Return to Examination</button>
+  </div>
+</section>
+<header>
+  <div class="header-inner">
+    <div class="header-row"><div class="brand">STI COLLEGE</div><a class="dashboard-link" href="admin_dashboard.html">Admin Dashboard</a></div>
+    <h1>ICT G11 – Problem Analysis and Java Examination</h1>
+    <p class="subtitle">Problem Analysis, Algorithms, Pseudocode, Flowcharts and Java Fundamentals</p>
+  </div>
+</header>
+
+<div class="subject-tabs" role="tablist" aria-label="Examination subjects">
+  <button class="tab-button active" type="button" data-tab="ict" role="tab" aria-selected="true" aria-controls="ict-panel" id="tab-ict">ICT G11</button>
+  <button class="tab-button" type="button" data-tab="math" role="tab" aria-selected="false" aria-controls="math-panel" id="tab-math">General Mathematics</button>
+</div>
+
+<main class="container">
+  <div id="ict-panel" class="tab-panel active" role="tabpanel" aria-labelledby="tab-ict">
+    <form id="examForm">
+      <section class="card">
+        <div class="section-title">Student Information</div>
+        <div class="meta">
+          <div><label for="name">Name</label><input id="name" type="text" placeholder="Enter your full name" required></div>
+          <div><label for="section">Section</label><input id="section" type="text" placeholder="Section" value="TECHPRO ICT 1101" disabled></div>
+          <div><label for="date">Date</label><input id="date" type="date" required></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Instructions</div>
+        <div class="instructions">
+          <strong>Multiple Choice:</strong> Choose the best answer. 40 items × 2 points = 80 points.<br>
+          <strong>Total:</strong> 80 points.
+          <table class="grading-scale" aria-label="Personal grading scale">
+            <thead>
+              <tr><th>Score</th><th>Recording</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>72 - 80</td><td>Will be recorded as 100 points</td></tr>
+              <tr><td>56 - 71</td><td>Actual score</td></tr>
+              <tr><td>55 &amp; below</td><td>Will be recorded as zero points</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Multiple Choice <span class="points">(40 items × 2 points = 80 points)</span></div>
+        <div class="question-launch">
+          <p>Answer each question in the examination window.</p>
+          <button id="openIctQuestions" class="open-questions" type="button">Open Questions</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="actions">
+          <button id="submitButton" class="submit" type="submit">Submit Examination</button>
+          <button class="reset" type="button" onclick="resetExam()">Reset Answers</button>
+        </div>
+      </section>
+
+    <section id="ictQuestionModal" class="question-modal" role="dialog" aria-modal="true" aria-labelledby="ictQuestionModalTitle">
+      <div class="question-dialog">
+        <div class="question-dialog-header">
+          <strong id="ictQuestionModalTitle">ICT Question</strong>
+          <span id="ictQuestionProgress" class="question-progress"></span>
+          <button class="question-close" type="button" data-close-question-modal="ictQuestionModal">Back to Exam</button>
+        </div>
+        <div id="mcqContainer"></div>
+        <div class="question-navigation">
+          <button id="ictPreviousQuestion" class="previous" type="button">Previous</button>
+          <button id="ictNextQuestion" type="button">Next</button>
+        </div>
+      </div>
+    </section>
+    </form>
+
+    <section id="result" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+      <div class="result-dialog">
+        <button class="result-close" type="button" onclick="closeResult()" aria-label="Close examination result">Close</button>
+        <div id="resultTitle" class="section-title">Examination Result</div>
+        <div id="resultText"></div>
+        <div id="review" class="review"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="math-panel" class="tab-panel" role="tabpanel" aria-labelledby="tab-math" hidden>
+    <form id="mathExamForm">
+      <section class="card">
+        <div class="section-title">Student Information</div>
+        <div class="meta">
+          <div><label for="mathName">Name</label><input id="mathName" type="text" placeholder="Enter your full name" required></div>
+          <div><label for="mathSection">Section</label><input id="mathSection" type="text" placeholder="Section" value="STEM - General Math" disabled></div>
+          <div><label for="mathDate">Date</label><input id="mathDate" type="date" required></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Instructions</div>
+        <div class="instructions">
+          <strong>Multiple Choice:</strong> Choose the best answer. 10 items × 2 points = 20 points.<br>
+          <strong>Total:</strong> 20 points.
+          <table class="grading-scale" aria-label="Mathematics grading scale">
+            <thead>
+              <tr><th>Score</th><th>Recording</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>18 - 20</td><td>Excellent</td></tr>
+              <tr><td>14 - 17</td><td>Proficient</td></tr>
+              <tr><td>13 &amp; below</td><td>Needs review</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">Multiple Choice <span class="points">(10 items × 2 points = 20 points)</span></div>
+        <div class="question-launch">
+          <p>Answer each question in the examination window.</p>
+          <button id="openMathQuestions" class="open-questions" type="button">Open Questions</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="actions">
+          <button id="mathSubmitButton" class="submit" type="submit">Submit Examination</button>
+          <button class="reset" type="button" onclick="resetMathExam()">Reset Answers</button>
+        </div>
+      </section>
+
+    <section id="mathQuestionModal" class="question-modal" role="dialog" aria-modal="true" aria-labelledby="mathQuestionModalTitle">
+      <div class="question-dialog">
+        <div class="question-dialog-header">
+          <strong id="mathQuestionModalTitle">Mathematics Question</strong>
+          <span id="mathQuestionProgress" class="question-progress"></span>
+          <button class="question-close" type="button" data-close-question-modal="mathQuestionModal">Back to Exam</button>
+        </div>
+        <div id="mathMcqContainer"></div>
+        <div class="question-navigation">
+          <button id="mathPreviousQuestion" class="previous" type="button">Previous</button>
+          <button id="mathNextQuestion" type="button">Next</button>
+        </div>
+      </div>
+    </section>
+    </form>
+
+    <section id="mathResult" role="dialog" aria-modal="true" aria-labelledby="mathResultTitle" style="display:none;position:fixed;inset:0;z-index:10;overflow-y:auto;margin:0;padding:28px 15px;background:rgba(0,43,92,.55)">
+      <div class="result-dialog">
+        <button class="result-close" type="button" onclick="closeResult('mathResult')" aria-label="Close mathematics result">Close</button>
+        <div id="mathResultTitle" class="section-title">Examination Result</div>
+        <div id="mathResultText"></div>
+        <div id="mathReview" class="review"></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>ICT G11 • Problem Analysis, Algorithms, Pseudocode and Java Fundamentals</footer>
+
+<script>
+const questions = [
+["Who led the Green Team at Sun Microsystems in the early 1990s that created the programming language originally named Oak?",["Dennis Ritchie","James Gosling","Bjarne Stroustrup","Guido van Rossum"],"B","James Gosling led the Green Team and created Oak, later renamed Java."],
+["Which Java core component compiles Java source code (.java) into bytecode (.class)?",["JVM","JRE","javac","JDK Library"],"C","The javac tool transforms Java source code into bytecode."],
+["Which Java platform is designed for mobile and resource-constrained embedded devices?",["Java SE","Java EE / Jakarta EE","Java ME","Java Card"],"C","Java ME is designed for embedded and resource-constrained devices."],
+["Which core component executes Java bytecode and supports platform independence?",["Java Virtual Machine (JVM)","Java Development Kit (JDK)","Java Compiler (javac)","Integrated Development Environment (IDE)"],"A","The JVM executes bytecode and enables cross-platform execution."],
+["Which object-oriented principle keeps data and behavior grouped together within a class?",["Inheritance","Polymorphism","Abstraction","Encapsulation"],"D","Encapsulation keeps data and behavior together within classes and objects."],
+["What popular Java web framework is widely used to build web applications and RESTful microservices?",["Swing","JavaFX","Spring Boot","Jakarta Card"],"C","Spring Boot is widely used for web applications and microservices."],
+["Which platform is tailored for smart cards, SIM cards, and secure elements?",["Java SE","Java Card","Java ME","Jakarta EE"],"B","Java Card targets smart cards, SIM cards, and secure elements."],
+["What mechanism automatically manages memory by removing objects that are no longer needed?",["Manual Deallocation","Bytecode Verification","Garbage Collection","Just-In-Time Compilation"],"C","Garbage collection reclaims memory held by unreferenced objects."],
+["Which environment variable points directly to the JDK installation directory?",["PATH","JAVA_HOME","CLASSPATH","JDK_ROOT"],"B","JAVA_HOME points to the JDK installation directory."],
+["Which command displays the currently installed version of the Java compiler?",["java -version","javac -version","java -compiler","javac -v"],"B","The command javac -version prints the compiler version."],
+["What IDE feature suggests keywords, methods, and variables as code is typed?",["Code Completion","Syntax Highlighting","Error Detection","Integrated Debugger"],"A","Code completion suggests methods, variables, and keywords."],
+["In a standard Java project, which component contains compiled .class files produced during building?",["Source Packages","Libraries","Build Files","Project Files"],"C","Build files contain compiled class files and generated build artifacts."],
+["Which IDE feature displays keywords and strings in distinct colors?",["Integrated Debugger","Version Control Integration","Syntax Highlighting","Code Refactoring"],"C","Syntax highlighting uses distinct colors for code elements."],
+["What is the primary function of the Build process before running a Java application?",["Executes the program in the JVM","Compiles source code into bytecode and checks for errors","Formats the source code style","Deletes old class files"],"B","Building compiles source code and reports compilation errors."],
+["What is the exact entry point method where every Java console application begins execution?",["public static void Start(String[] args)","public void main(String args)","public static void main(String[] args)","static main(String[] args)"],"C","The standard entry point is public static void main(String[] args)."],
+["If a class is declared as public class GradeReport, what must the source file be named?",["gradereport.java","GradeReport.java","GradeReport.class","Grade_Report.java"],"B","A public class name must match its source file name exactly."],
+["What naming convention is standard for Java class names such as StudentPortal?",["camelCase","snake_case","PascalCase","UPPERCASE"],"C","Java class names conventionally use PascalCase."],
+["Which symbol terminates standard executable statements in Java?",["Colon (:)","Period (.)","Semicolon (;)","Comma (,)"],"C","Standard Java statements terminate with a semicolon."],
+["Which keyword indicates that a method does not return a value?",["static","public","void","null"],"C","The void keyword indicates no return value."],
+["What naming convention is standard for Java method and variable names?",["PascalCase","camelCase","Kebab-case","MACRO_CASE"],"B","Methods and variables conventionally use camelCase."],
+["What structural error occurs when a complete method declaration is written inside another method?",["Nesting error / Illegal method placement","Method chaining","Class inheritance issue","Package violation"],"A","Java method declarations cannot be nested inside another method."],
+["What is a group of code enclosed within opening and closing curly braces called?",["Statement","Block","Class header","Expression"],"B","Code enclosed in braces is called a block."],
+["Which primitive type occupies 32 bits and is the default choice for integer values?",["byte","short","int","long"],"C","int is a 32-bit signed integer type."],
+["What suffix must be appended to a floating-point literal assigned directly to a float?",["D or d","F or f","L or l","M or m"],"B","Float literals require an F or f suffix."],
+["Which primitive type stores a single Unicode character in single quotes?",["String","char","byte","Text"],"B","The char type stores one Unicode character."],
+["Which keyword declares a constant whose value cannot be reassigned?",["static","const","final","immutable"],"C","The final keyword prevents reassignment after initialization."],
+["What comment begins with /** and ends with */ for Javadoc HTML documentation?",["Single-line comment","Block comment","Documentation comment","Inline comment"],"C","Documentation comments are parsed by Javadoc."],
+["What conversion occurs automatically when assigning a smaller numeric type to a larger type?",["Narrowing conversion","Explicit casting","Widening conversion","String parsing"],"C","Assigning a smaller numeric type to a larger one is widening conversion."],
+["What is the result of value %= 3 when value initially equals 11?",["3","2","3.66","0"],"B","11 % 3 equals 2, the remainder after division."],
+["What symbols create a single-line comment in Java?",["/*","//","#","<!--"],"B","Single-line comments begin with two forward slashes."],
+["What is the process of breaking a large problem into smaller manageable tasks called?",["Algorithm design","Decomposition","Pseudocode","Verification"],"B","Decomposition breaks a larger problem into smaller tasks."],
+["Which flowchart shape represents an Input or Output operation?",["Oval / Rectangle with rounded ends","Parallelogram","Rectangle","Diamond"],"B","A parallelogram represents input/output operations."],
+["In pseudocode, what is the purpose of SET?",["Obtains information from the user","Assigns or calculates a value","Displays a result","Indicates algorithm end"],"B","SET assigns or calculates a value."],
+["What type of flowchart symbol is represented by a diamond?",["Terminator","Process","Decision","Flowline"],"C","A diamond represents a decision condition."],
+["What error occurs when a program runs but produces incorrect results?",["Syntax error","Runtime crash","Logic error","Linker error"],"C","A logic error causes incorrect operations or results."],
+["In Java integer division, what is the result of 7 / 2?",["3.5","3","4","1"],"B","Integer division discards the decimal fraction and yields 3."],
+["Which relational operator checks whether two values are equal?",["=","==","!=","<>"],"B","The == operator tests equality; = performs assignment."],
+["What is the result of (true || false)?",["true","false","null","Error"],"A","Logical OR is true when at least one operand is true."],
+["Which operation is performed first in 10 + 5 * 2?",["10 + 5","5 * 2","Left to right addition","Evaluates to 30"],"B","Multiplication has higher precedence than addition."],
+["Which logical operator reverses a Boolean value?",["&&","||","!","^"],"C","The logical NOT operator ! inverts a Boolean value."]
+];
+
+const mathQuestions = [
+  ["What is the value of 12 + 8 × 3?",["36","60","28","24"],"B","Multiplication comes before addition, so 8 × 3 = 24 and 12 + 24 = 36."],
+  ["Find the remainder when 49 is divided by 6.",["1","3","4","5"],"C","49 ÷ 6 = 8 remainder 1."],
+  ["What is 25% of 240?",["40","50","60","80"],"C","25% of 240 is 0.25 × 240 = 60."],
+  ["Solve for x: 3x - 9 = 12.",["x = 3","x = 5","x = 7","x = 9"],"C","Add 9 to both sides: 3x = 21, then divide by 3."],
+  ["Which fraction is equivalent to 0.75?",["1/2","2/3","3/4","4/5"],"C","0.75 = 75/100 = 3/4."],
+  ["A triangle has angles 45°, 65°, and x°. What is x?",["60°","70°","80°","90°"],"B","The sum of triangle angles is 180°, so x = 180 - 45 - 65 = 70."],
+  ["What is the product of 7 and 9?",["56","63","72","81"],"B","7 × 9 = 63."],
+  ["Which number is the greatest common factor of 24 and 36?",["6","8","12","18"],"C","12 is the greatest common factor of 24 and 36."],
+  ["If a = 5 and b = 2, what is a² - b²?",["17","21","29","31"],"C","25 - 4 = 21."],
+  ["What is the perimeter of a square with side length 6 cm?",["12 cm","18 cm","24 cm","36 cm"],"C","Perimeter = 4 × 6 = 24 cm."]
+];
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,character=>(
+    {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character])
+  );
+}
+
+function renderMCQ(){
+  const c=document.getElementById("mcqContainer");
+  c.innerHTML=questions.map((q,i)=>{
+    const n=i+1;
+    return `<div class="question" data-question-index="${i}"${i===0?"":" hidden"}>
+      <div class="qtext">${n}. ${escapeHTML(q[0])}</div>
+      ${q[1].map((opt,j)=>{
+        const letter=String.fromCharCode(65+j);
+        return `<label class="option"><input type="radio" name="q${n}" value="${letter}"${j===0?" required":""}> <strong>${letter}.</strong> ${escapeHTML(opt)}</label>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+}
+function renderMathQuestions(){
+  const c=document.getElementById("mathMcqContainer");
+  c.innerHTML=mathQuestions.map((q,i)=>{
+    const n=i+1;
+    return `<div class="question" data-question-index="${i}"${i===0?"":" hidden"}>
+      <div class="qtext">${n}. ${escapeHTML(q[0])}</div>
+      ${q[1].map((opt,j)=>{
+        const letter=String.fromCharCode(65+j);
+        return `<label class="option"><input type="radio" name="m${n}" value="${letter}"${j===0?" required":""}> <strong>${letter}.</strong> ${escapeHTML(opt)}</label>`;
+      }).join("")}
+    </div>`;
+  }).join("");
+}
+function shuffleQuestions(){
+  for(let i=questions.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [questions[i],questions[j]]=[questions[j],questions[i]];
+  }
+}
+const questionModalState={
+  ict:{modalId:"ictQuestionModal",containerId:"mcqContainer",progressId:"ictQuestionProgress",previousId:"ictPreviousQuestion",nextId:"ictNextQuestion",openId:"openIctQuestions",total:()=>questions.length,index:0},
+  math:{modalId:"mathQuestionModal",containerId:"mathMcqContainer",progressId:"mathQuestionProgress",previousId:"mathPreviousQuestion",nextId:"mathNextQuestion",openId:"openMathQuestions",total:()=>mathQuestions.length,index:0}
+};
+function updateQuestionModal(subject){
+  const state=questionModalState[subject];
+  const container=document.getElementById(state.containerId);
+  const questionElements=container.querySelectorAll(".question");
+  questionElements.forEach((question,index)=>{question.hidden=index!==state.index;});
+  document.getElementById(state.progressId).textContent=`Question ${state.index+1} of ${state.total()}`;
+  document.getElementById(state.previousId).disabled=state.index===0;
+  document.getElementById(state.nextId).textContent=state.index===state.total()-1?"Finish Questions":"Next";
+  const currentQuestion=questionElements[state.index];
+  if(currentQuestion){
+    const firstInput=currentQuestion.querySelector("input");
+    if(firstInput) firstInput.focus();
+  }
+}
+function openQuestionModal(subject){
+  const state=questionModalState[subject];
+  document.getElementById(state.modalId).classList.add("open");
+  document.body.style.overflow="hidden";
+  updateQuestionModal(subject);
+}
+function closeQuestionModal(subject){
+  const state=questionModalState[subject];
+  document.getElementById(state.modalId).classList.remove("open");
+  document.body.style.overflow="";
+  document.getElementById(state.openId).focus();
+}
+function moveQuestion(subject,direction){
+  const state=questionModalState[subject];
+  const currentName=subject==="ict"?`q${state.index+1}`:`m${state.index+1}`;
+  if(direction>0&&!document.querySelector(`input[name="${currentName}"]:checked`)){
+    alert("Please select an answer before continuing.");
+    return;
+  }
+  const nextIndex=state.index+direction;
+  if(nextIndex<0||nextIndex>=state.total()){
+    closeQuestionModal(subject);
+    return;
+  }
+  state.index=nextIndex;
+  updateQuestionModal(subject);
+}
+Object.entries(questionModalState).forEach(([subject,state])=>{
+  document.getElementById(state.openId).addEventListener("click",()=>openQuestionModal(subject));
+  document.getElementById(state.previousId).addEventListener("click",()=>moveQuestion(subject,-1));
+  document.getElementById(state.nextId).addEventListener("click",()=>moveQuestion(subject,1));
+});
+document.querySelectorAll("[data-close-question-modal]").forEach(button=>{
+  button.addEventListener("click",()=>closeQuestionModal(button.dataset.closeQuestionModal==="ictQuestionModal"?"ict":"math"));
+});
+async function grade(){
+  document.getElementById("submissionLoading").style.display="grid";
+  document.body.style.overflow="hidden";
+  let correct=0, answered=0, review=[];
+  questions.forEach((q,i)=>{
+    const selected=document.querySelector(`input[name="q${i+1}"]:checked`);
+    document.querySelectorAll(`input[name="q${i+1}"]`).forEach(input=>{
+      const option=input.closest(".option");
+      option.classList.toggle("answer-correct",input.value===q[2]);
+      option.classList.toggle("answer-wrong",Boolean(selected)&&input===selected&&input.value!==q[2]);
+    });
+    if(selected){
+      answered++;
+      if(selected.value===q[2]) correct++;
+      else review.push({n:i+1,selected:selected.value,correct:q[2]});
+    }
+  });
+  const points=correct*2;
+  let saveMessage="";
+  if(SUPABASE_KEY==="******"){
+    saveMessage="The examination was graded, but it could not be saved because the Supabase API key is not configured.";
+    console.error(saveMessage);
+  }else{
+    const { error } = await supabaseClient
+      .from("exam_submissions")
+      .insert({
+        student_name: document.getElementById("name").value.trim(),
+        section: document.getElementById("section").value.trim(),
+        exam_date: document.getElementById("date").value,
+        mcq_score: points,
+        essay_answered: 0
+      });
+
+    if (error) {
+      saveMessage="The examination was graded, but it could not be saved. Please contact your instructor.";
+      console.error("Could not save exam result:", error);
+    }
+  }
+if (!saveMessage) {
+  const submitButton=document.getElementById("submitButton");
+  submitButton.type="button";
+  submitButton.textContent="Retake Examination";
+  submitButton.onclick=retakeExam;
+}
+  document.getElementById("submissionLoading").style.display="none";
+  document.getElementById("result").style.display="block";
+  document.getElementById("resultText").innerHTML=
+    `<div class="score">${points} / 80</div>
+     <p><strong>Multiple-choice:</strong> ${correct} correct out of 40. ${answered} item(s) answered.</p>
+     <p class="success">Your score is based on 40 multiple-choice items worth 2 points each.</p>
+     ${saveMessage?`<p class="warning"><strong>Save status:</strong> ${saveMessage}</p>`:"<p class=\"success\"><strong>Save status:</strong> Result saved successfully.</p>"}`;
+  document.getElementById("review").innerHTML = review.length
+    ? `<h3>Items to Review</h3>${review.map(x=>`<div class="wrong">Item ${x.n}: your answer <strong>${x.selected}</strong> • correct answer <strong>${x.correct}</strong><br>${questions[x.n-1][3]}</div>`).join("")}`
+    : `<div class="correct">Excellent! All answered items are correct.</div>`;
+  document.querySelector(".result-close").focus();
+}
+async function gradeMath(){
+  let correct=0, answered=0, review=[];
+  const form=document.getElementById("mathExamForm");
+  mathQuestions.forEach((q,i)=>{
+    const selected=form.querySelector(`input[name="m${i+1}"]:checked`);
+    form.querySelectorAll(`input[name="m${i+1}"]`).forEach(input=>{
+      const option=input.closest(".option");
+      option.classList.toggle("answer-correct",input.value===q[2]);
+      option.classList.toggle("answer-wrong",Boolean(selected)&&input===selected&&input.value!==q[2]);
+    });
+    if(selected){
+      answered++;
+      if(selected.value===q[2]) correct++;
+      else review.push({n:i+1,selected:selected.value,correct:q[2]});
+    }
+  });
+  const points=correct*2;
+  const result=document.getElementById("mathResult");
+  const resultText=document.getElementById("mathResultText");
+  const reviewBox=document.getElementById("mathReview");
+  result.style.display="block";
+  resultText.innerHTML=`<div class="score">${points} / 20</div>
+    <p><strong>Multiple-choice:</strong> ${correct} correct out of 10. ${answered} item(s) answered.</p>
+    <p class="success">Your score is based on 10 multiple-choice items worth 2 points each.</p>`;
+  reviewBox.innerHTML = review.length
+    ? `<h3>Items to Review</h3>${review.map(x=>`<div class="wrong">Item ${x.n}: your answer <strong>${x.selected}</strong> • correct answer <strong>${x.correct}</strong><br>${mathQuestions[x.n-1][3]}</div>`).join("")}`
+    : `<div class="correct">Excellent! All answered items are correct.</div>`;
+  result.querySelector(".result-close").focus();
+}
+document.getElementById("examForm").addEventListener("submit",e=>{e.preventDefault();grade();});
+document.getElementById("mathExamForm").addEventListener("submit",e=>{e.preventDefault();gradeMath();});
+function closeResult(targetId="result"){
+  document.getElementById(targetId).style.display="none";
+  document.body.style.overflow="";
+}
+function resetExam(){
+  if(confirm("Reset all answers?")){
+    document.getElementById("examForm").reset();
+    questionModalState.ict.index=0;
+    closeResult();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+}
+function resetMathExam(){
+  if(confirm("Reset all answers?")){
+    document.getElementById("mathExamForm").reset();
+    questionModalState.math.index=0;
+    closeResult("mathResult");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+}
+function retakeExam(){
+  window.location.reload();
+}
+function switchTab(tabName){
+  const tabs=document.querySelectorAll(".tab-button");
+  const panels=document.querySelectorAll(".tab-panel");
+  tabs.forEach(button=>{
+    const isActive=button.dataset.tab===tabName;
+    button.classList.toggle("active",isActive);
+    button.setAttribute("aria-selected",String(isActive));
+  });
+  panels.forEach(panel=>{
+    const isActive=panel.id===`${tabName}-panel`;
+    panel.classList.toggle("active",isActive);
+    panel.hidden=!isActive;
+  });
+}
+document.querySelectorAll(".tab-button").forEach(button=>{
+  button.addEventListener("click",()=>switchTab(button.dataset.tab));
+});
+function prepareExam(){
+  shuffleQuestions();
+  renderMCQ();
+  renderMathQuestions();
+  document.getElementById("date").valueAsDate=new Date();
+  document.getElementById("mathDate").valueAsDate=new Date();
+  document.getElementById("loadingMessage").textContent="Your questions are ready. Good luck!";
+  const startButton=document.getElementById("startExam");
+  startButton.disabled=false;
+  startButton.textContent="Start Examination";
+  setTimeout(()=>{
+    document.getElementById("loadingScreen").style.display="none";
+    document.getElementById("welcomeScreen").style.display="grid";
+    startButton.focus();
+  },800);
+}
+async function enterFullscreen(){
+  if(isIPhone()){
+    return;
+  }
+  if(!document.fullscreenElement){
+    await document.documentElement.requestFullscreen();
+  }
+}
+function isIPhone(){
+  return /iPhone|iPod/i.test(navigator.userAgent);
+}
+let examStarted=false;
+let pageLeaveRefreshStarted=false;
+function refreshAfterPageLeave(){
+  if(examStarted&&!pageLeaveRefreshStarted){
+    pageLeaveRefreshStarted=true;
+    window.location.reload();
+  }
+}
+function pauseForPageLeave(){
+  if(examStarted&&(document.hidden||!document.hasFocus())){
+    document.getElementById("pageLeaveScreen").style.display="grid";
+    document.body.style.overflow="hidden";
+  }
+}
+function resumeAfterPageReturn(){
+  if(examStarted&&document.visibilityState==="visible"&&document.hasFocus()&&(isIPhone()||document.fullscreenElement)){
+    document.getElementById("pageLeaveScreen").style.display="none";
+    document.body.style.overflow="";
+  }
+}
+async function startExam(){
+  try{
+    await enterFullscreen();
+  }catch(error){
+    console.error("Fullscreen is required to start the examination:",error);
+    document.getElementById("loadingMessage").textContent="Fullscreen permission is required to start the examination.";
+    return;
+  }
+  document.getElementById("welcomeScreen").style.display="none";
+  document.getElementById("fullscreenScreen").style.display="none";
+  document.body.style.overflow="";
+  examStarted=true;
+  document.getElementById("name").focus();
+}
+document.getElementById("startExam").addEventListener("click",startExam);
+document.getElementById("returnFullscreen").addEventListener("click",startExam);
+document.getElementById("returnPage").addEventListener("click",startExam);
+document.addEventListener("fullscreenchange",()=>{
+  if(examStarted&&!isIPhone()&&!document.fullscreenElement){
+    document.getElementById("fullscreenScreen").style.display="grid";
+    document.body.style.overflow="hidden";
+    document.getElementById("returnFullscreen").focus();
+  }
+  resumeAfterPageReturn();
+});
+document.addEventListener("visibilitychange",pauseForPageLeave);
+window.addEventListener("blur",pauseForPageLeave);
+window.addEventListener("focus",resumeAfterPageReturn);
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden) refreshAfterPageLeave();
+});
+window.addEventListener("blur",refreshAfterPageLeave);
+document.body.style.overflow="hidden";
+window.addEventListener("load",prepareExam,{once:true});
+</script>
+</body>
+</html>
