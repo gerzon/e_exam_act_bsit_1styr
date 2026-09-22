@@ -493,6 +493,28 @@ function detectDevice(){
 
 const device=detectDevice();
 
+// Save a completed examination and return a user-facing status message.
+async function saveExamSubmission(submission){
+  if(SUPABASE_KEY==="******"){
+    const message="The examination was graded, but it was not saved because the Supabase anon key is not configured.";
+    console.error(message);
+    return message;
+  }
+  try{
+    const { error }=await supabaseClient
+      .from("exam_submissions")
+      .insert(submission);
+    if(error){
+      console.error("Could not save exam result:",error);
+      return `The examination was graded, but it could not be saved (${error.message}).`;
+    }
+    return "";
+  }catch(error){
+    console.error("Could not save exam result:",error);
+    return "The examination was graded, but it could not be saved because the database request failed.";
+  }
+}
+
 // Render ICT questions and their answer choices.
 function renderMCQ(){
   const c=document.getElementById("mcqContainer");
@@ -605,27 +627,14 @@ async function grade(){
     }
   });
   const points=correct*2;
-  let saveMessage="";
-  if(SUPABASE_KEY==="******"){
-    saveMessage="The examination was graded, but it could not be saved because the Supabase API key is not configured.";
-    console.error(saveMessage);
-  }else{
-    const { error } = await supabaseClient
-      .from("exam_submissions")
-      .insert({
-        student_name: document.getElementById("name").value.trim(),
-        section: document.getElementById("section").value.trim(),
-        exam_date: document.getElementById("date").value,
-        mcq_score: points,
-        essay_answered: 0,
-        device
-      });
-
-    if (error) {
-      saveMessage="The examination was graded, but it could not be saved. Please contact your instructor.";
-      console.error("Could not save exam result:", error);
-    }
-  }
+  const saveMessage=await saveExamSubmission({
+    student_name: document.getElementById("name").value.trim(),
+    section: document.getElementById("section").value.trim(),
+    exam_date: document.getElementById("date").value,
+    mcq_score: points,
+    essay_answered: 0,
+    device
+  });
 if (!saveMessage) {
   const submitButton=document.getElementById("submitButton");
   submitButton.type="button";
@@ -662,6 +671,14 @@ async function gradeMath(){
     }
   });
   const points=correct*2;
+  const saveMessage=await saveExamSubmission({
+    student_name: document.getElementById("mathName").value.trim(),
+    section: document.getElementById("mathSection").value.trim(),
+    exam_date: document.getElementById("mathDate").value,
+    mcq_score: points,
+    essay_answered: 0,
+    device
+  });
   const result=document.getElementById("mathResult");
   const resultText=document.getElementById("mathResultText");
   const reviewBox=document.getElementById("mathReview");
@@ -669,6 +686,11 @@ async function gradeMath(){
   resultText.innerHTML=`<div class="score">${points} / 20</div>
     <p><strong>Multiple-choice:</strong> ${correct} correct out of 10. ${answered} item(s) answered.</p>
     <p class="success">Your score is based on 10 multiple-choice items worth 2 points each.</p>`;
+  if(saveMessage){
+    resultText.innerHTML+=`<p class="warning"><strong>Save status:</strong> ${escapeHTML(saveMessage)}</p>`;
+  }else{
+    resultText.innerHTML+=`<p class="success"><strong>Save status:</strong> Result saved successfully.</p>`;
+  }
   reviewBox.innerHTML = review.length
     ? `<h3>Items to Review</h3>${review.map(x=>`<div class="wrong">Item ${x.n}: your answer <strong>${x.selected}</strong> • correct answer <strong>${x.correct}</strong><br>${mathQuestions[x.n-1][3]}</div>`).join("")}`
     : `<div class="correct">Excellent! All answered items are correct.</div>`;
