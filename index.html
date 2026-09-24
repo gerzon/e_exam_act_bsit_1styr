@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ICT G11 Problem Analysis and Java Examination</title>
+<title>ACT-BSIT 1101 Conceptual Understanding Assessment</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // Supabase connection settings used to save completed examination results.
@@ -244,8 +244,8 @@ const supabaseClient = window.supabase.createClient(
 <header>
   <div class="header-inner">
     <div class="header-row"><div class="brand">STI COLLEGE</div><a class="dashboard-link" href="admin_dashboard.html">Admin Dashboard</a></div>
-    <h1>ICT G11 – Problem Analysis and Java Examination</h1>
-    <p class="subtitle">Problem Analysis, Algorithms, Pseudocode, Flowcharts and Java Fundamentals</p>
+    <h1>ACT-BSIT 1101 Conceptual Understanding Assessment</h1>
+    <p class="subtitle">Conceptual Understanding Assessment</p>
   </div>
 </header>
 
@@ -264,7 +264,7 @@ const supabaseClient = window.supabase.createClient(
         <div class="section-title">Student Information</div>
         <div class="meta">
           <div><label for="name">Name</label><input id="name" type="text" placeholder="Enter your full name" required></div>
-          <div><label for="section">Section</label><input id="section" type="text" placeholder="Section" value="TECHPRO ICT 1101" disabled></div>
+          <div><label for="section">Section</label><input id="section" type="text" placeholder="Section" value="ACT-BSIT 1101" disabled></div>
           <div><label for="date">Date</label><input id="date" type="date" required></div>
         </div>
       </section>
@@ -273,16 +273,16 @@ const supabaseClient = window.supabase.createClient(
       <section class="card">
         <div class="section-title">Instructions</div>
         <div class="instructions">
-          <strong>Multiple Choice:</strong> Choose the best answer. 40 items × 2 points = 80 points.<br>
-          <strong>Total:</strong> 80 points.
+          <strong>Multiple Choice:</strong> Choose the best answer. 35 items × 2 points = 70 points.<br>
+          <strong>Total:</strong> 70 points.
           <table class="grading-scale" aria-label="Personal grading scale">
             <thead>
               <tr><th>Score</th><th>Recording</th></tr>
             </thead>
             <tbody>
-              <tr><td>72 - 80</td><td>Will be recorded as 100 points</td></tr>
-              <tr><td>56 - 71</td><td>Actual score</td></tr>
-              <tr><td>55 &amp; below</td><td>Will be recorded as zero points</td></tr>
+              <tr><td>63 - 70</td><td>Will be recorded as 100 points</td></tr>
+              <tr><td>49 - 62</td><td>Actual score</td></tr>
+              <tr><td>48 &amp; below</td><td>Will be recorded as zero points</td></tr>
             </tbody>
           </table>
         </div>
@@ -290,7 +290,7 @@ const supabaseClient = window.supabase.createClient(
 
       <!-- ICT question launcher. Individual questions render in the modal below. -->
       <section class="card">
-        <div class="section-title">Multiple Choice <span class="points">(40 items × 2 points = 80 points)</span></div>
+        <div class="section-title">Multiple Choice <span class="points">(35 items × 2 points = 70 points)</span></div>
         <div class="question-launch">
           <p>Answer each question in the examination window.</p>
           <button id="openIctQuestions" class="open-questions" type="button">Open Questions</button>
@@ -411,54 +411,47 @@ const supabaseClient = window.supabase.createClient(
 </main>
 
 <!-- Site footer. -->
-<footer>ICT G11 • Problem Analysis, Algorithms, Pseudocode and Java Fundamentals</footer>
+<footer>ACT-BSIT 1101 Conceptual Understanding Assessment</footer>
 
 <script>
 // ICT question bank.
 const questions = [
-["Who led the Green Team at Sun Microsystems in the early 1990s that created the programming language originally named Oak?",["Dennis Ritchie","James Gosling","Bjarne Stroustrup","Guido van Rossum"],"B","James Gosling led the Green Team and created Oak, later renamed Java."],
-["Which Java core component compiles Java source code (.java) into bytecode (.class)?",["JVM","JRE","javac","JDK Library"],"C","The javac tool transforms Java source code into bytecode."],
-["Which Java platform is designed for mobile and resource-constrained embedded devices?",["Java SE","Java EE / Jakarta EE","Java ME","Java Card"],"C","Java ME is designed for embedded and resource-constrained devices."],
-["Which core component executes Java bytecode and supports platform independence?",["Java Virtual Machine (JVM)","Java Development Kit (JDK)","Java Compiler (javac)","Integrated Development Environment (IDE)"],"A","The JVM executes bytecode and enables cross-platform execution."],
-["Which object-oriented principle keeps data and behavior grouped together within a class?",["Inheritance","Polymorphism","Abstraction","Encapsulation"],"D","Encapsulation keeps data and behavior together within classes and objects."],
-["What popular Java web framework is widely used to build web applications and RESTful microservices?",["Swing","JavaFX","Spring Boot","Jakarta Card"],"C","Spring Boot is widely used for web applications and microservices."],
-["Which platform is tailored for smart cards, SIM cards, and secure elements?",["Java SE","Java Card","Java ME","Jakarta EE"],"B","Java Card targets smart cards, SIM cards, and secure elements."],
-["What mechanism automatically manages memory by removing objects that are no longer needed?",["Manual Deallocation","Bytecode Verification","Garbage Collection","Just-In-Time Compilation"],"C","Garbage collection reclaims memory held by unreferenced objects."],
-["Which environment variable points directly to the JDK installation directory?",["PATH","JAVA_HOME","CLASSPATH","JDK_ROOT"],"B","JAVA_HOME points to the JDK installation directory."],
-["Which command displays the currently installed version of the Java compiler?",["java -version","javac -version","java -compiler","javac -v"],"B","The command javac -version prints the compiler version."],
-["What IDE feature suggests keywords, methods, and variables as code is typed?",["Code Completion","Syntax Highlighting","Error Detection","Integrated Debugger"],"A","Code completion suggests methods, variables, and keywords."],
-["In a standard Java project, which component contains compiled .class files produced during building?",["Source Packages","Libraries","Build Files","Project Files"],"C","Build files contain compiled class files and generated build artifacts."],
-["Which IDE feature displays keywords and strings in distinct colors?",["Integrated Debugger","Version Control Integration","Syntax Highlighting","Code Refactoring"],"C","Syntax highlighting uses distinct colors for code elements."],
-["What is the primary function of the Build process before running a Java application?",["Executes the program in the JVM","Compiles source code into bytecode and checks for errors","Formats the source code style","Deletes old class files"],"B","Building compiles source code and reports compilation errors."],
-["What is the exact entry point method where every Java console application begins execution?",["public static void Start(String[] args)","public void main(String args)","public static void main(String[] args)","static main(String[] args)"],"C","The standard entry point is public static void main(String[] args)."],
-["If a class is declared as public class GradeReport, what must the source file be named?",["gradereport.java","GradeReport.java","GradeReport.class","Grade_Report.java"],"B","A public class name must match its source file name exactly."],
-["What naming convention is standard for Java class names such as StudentPortal?",["camelCase","snake_case","PascalCase","UPPERCASE"],"C","Java class names conventionally use PascalCase."],
-["Which symbol terminates standard executable statements in Java?",["Colon (:)","Period (.)","Semicolon (;)","Comma (,)"],"C","Standard Java statements terminate with a semicolon."],
-["Which keyword indicates that a method does not return a value?",["static","public","void","null"],"C","The void keyword indicates no return value."],
-["What naming convention is standard for Java method and variable names?",["PascalCase","camelCase","Kebab-case","MACRO_CASE"],"B","Methods and variables conventionally use camelCase."],
-["What structural error occurs when a complete method declaration is written inside another method?",["Nesting error / Illegal method placement","Method chaining","Class inheritance issue","Package violation"],"A","Java method declarations cannot be nested inside another method."],
-["What is a group of code enclosed within opening and closing curly braces called?",["Statement","Block","Class header","Expression"],"B","Code enclosed in braces is called a block."],
-["Which primitive type occupies 32 bits and is the default choice for integer values?",["byte","short","int","long"],"C","int is a 32-bit signed integer type."],
-["What suffix must be appended to a floating-point literal assigned directly to a float?",["D or d","F or f","L or l","M or m"],"B","Float literals require an F or f suffix."],
-["Which primitive type stores a single Unicode character in single quotes?",["String","char","byte","Text"],"B","The char type stores one Unicode character."],
-["Which keyword declares a constant whose value cannot be reassigned?",["static","const","final","immutable"],"C","The final keyword prevents reassignment after initialization."],
-["What comment begins with /** and ends with */ for Javadoc HTML documentation?",["Single-line comment","Block comment","Documentation comment","Inline comment"],"C","Documentation comments are parsed by Javadoc."],
-["What conversion occurs automatically when assigning a smaller numeric type to a larger type?",["Narrowing conversion","Explicit casting","Widening conversion","String parsing"],"C","Assigning a smaller numeric type to a larger one is widening conversion."],
-["What is the result of value %= 3 when value initially equals 11?",["3","2","3.66","0"],"B","11 % 3 equals 2, the remainder after division."],
-["What symbols create a single-line comment in Java?",["/*","//","#","<!--"],"B","Single-line comments begin with two forward slashes."],
-["What is the process of breaking a large problem into smaller manageable tasks called?",["Algorithm design","Decomposition","Pseudocode","Verification"],"B","Decomposition breaks a larger problem into smaller tasks."],
-["Which flowchart shape represents an Input or Output operation?",["Oval / Rectangle with rounded ends","Parallelogram","Rectangle","Diamond"],"B","A parallelogram represents input/output operations."],
-["In pseudocode, what is the purpose of SET?",["Obtains information from the user","Assigns or calculates a value","Displays a result","Indicates algorithm end"],"B","SET assigns or calculates a value."],
-["What type of flowchart symbol is represented by a diamond?",["Terminator","Process","Decision","Flowline"],"C","A diamond represents a decision condition."],
-["What error occurs when a program runs but produces incorrect results?",["Syntax error","Runtime crash","Logic error","Linker error"],"C","A logic error causes incorrect operations or results."],
-["In Java integer division, what is the result of 7 / 2?",["3.5","3","4","1"],"B","Integer division discards the decimal fraction and yields 3."],
-["Which relational operator checks whether two values are equal?",["=","==","!=","<>"],"B","The == operator tests equality; = performs assignment."],
-["What is the result of (true || false)?",["true","false","null","Error"],"A","Logical OR is true when at least one operand is true."],
-["Which operation is performed first in 10 + 5 * 2?",["10 + 5","5 * 2","Left to right addition","Evaluates to 30"],"B","Multiplication has higher precedence than addition."],
-["Which logical operator reverses a Boolean value?",["&&","||","!","^"],"C","The logical NOT operator ! inverts a Boolean value."]
-];
-
-// Mathematics question bank.
+["What are symbols used to compute, compare values, and test multiple conditions called?",["Variables","Operators","Statements","Operands"],"B","Operators are symbols that perform calculations, comparisons, and logical tests."],
+["What is the term for the value that is computed by an operator?",["Literal","Identifier","Operand","Expression"],"C","An operand is the value or variable the operator acts on."],
+["Which arithmetic operator is used to calculate the remainder of an integer division?",["/","*","^","%"],"D","The % operator returns the remainder after division."],
+["When adding two byte variables in Java, what data type does Java automatically convert the resulting calculation to?",["short","byte","int","long"],"C","Java promotes byte operands to int before arithmetic operations."],
+["What is the range of values that the byte data type can hold?",["-32,768 to +32,767","-128 to +127","0 to 255","-2,147,483,648 to +2,147,483,647"],"B","A byte is an 8-bit signed integer ranging from -128 to 127."],
+["What happens if one of the operands of the + operator is a String object?",["An error occurs","The string is converted to a number","The second operand is converted into a string before joining","The operator performs integer addition"],"C","When + sees a String, Java concatenates the other operand as a String."],
+["What is the result of the expression \"abc\" + \"xyz\"?",["abc","xyz","abc xyz","abcxyz"],"D","String concatenation joins both literals without spaces."],
+["Which assignment operator adds the right operand to the left operand and stores the result in the left operand?",["=","+=","=+","++"],"B","The += operator is shorthand for left = left + right."],
+["How is the expression x %= z represented in expanded form?",["x = z % x","x = x % z","x % x = z","z = x % z"],"B","The compound assignment x %= z is equivalent to x = x % z."],
+["How many operands are required by a unary operator?",["0","1","2","3"],"B","A unary operator acts on a single operand."],
+["Which unary operator inverts the value of a Boolean variable?",["~","-","!","^"],"C","The ! operator negates a Boolean value."],
+["When an increment operator precedes a variable (e.g., ++invar), what is it called?",["Post-increment","Suffix-increment","Compound-increment","Pre-increment"],"D","Pre-increment increments before the value is used in an expression."],
+["What alternative name is often given to comparison operators?",["Logical operators","Relational operators","Conditional operators","Shift operators"],"B","Comparison operators are commonly called relational operators."],
+["Which relational operator checks whether the left operand is greater than or equal to the right operand?",["=>",">=",">","=="],"B","The >= operator means greater than or equal to."],
+["On which data types can shift operators strictly be used?",["Floating-point data types","Integer data types","Boolean data types","String data types"],"B","Shift operators work only on integer types in Java."],
+["How many bytes does the int data type occupy in memory?",["2 bytes","4 bytes","8 bytes","1 byte"],"B","An int in Java is 32 bits, which is 4 bytes."],
+["Which operator shifts bits to the left, filling zeros at the right?",[">>",">>>","<<","<~"],"C","The << operator shifts bits left and fills with zeros on the right."],
+["What filler bit is used when shifting in whichever direction?",["1","0","-1","Null"],"B","Right/left shifts fill with 0s for unsigned or logical shifting contexts; zero is the default filler here."],
+["Which bitwise operator yields 1 only if both corresponding bits are 1?",["&","|","^","~"],"A","The & operator performs bitwise AND."],
+["What is the result of a Bitwise XOR (^) operation if both bits have the same value?",["1","0","True","Undefined"],"B","XOR returns 1 only when the bits differ; identical bits yield 0."],
+["Which bitwise operator converts all 1 bits to 0s and all 0 bits to 1s?",["!","^","~","%"],"C","The ~ operator is the bitwise complement."],
+["What limitation distinguishes logical operators from bitwise operators?",["Logical operators cannot process binary values","Logical operators are limited to Boolean expressions only","Logical operators cannot be used in if statements","Logical operators require three operands"],"B","Logical operators work exclusively with boolean values, unlike bitwise operators."],
+["Which symbol represents the Logical OR operator?",["|","||","&","&&"],"B","The || operator is logical OR."],
+["Which operator is also known as the ternary operator?",["Relational operator","Conditional operator","Assignment operator","Shift operator"],"B","The ?: operator is called the ternary conditional operator."],
+["What is the correct syntax for the ternary operator?",["(condition) : val1 ? val2","(condition) ? val1 : val2","if (condition) ? val1 : val2","val1 ? val2 : condition"],"B","The correct form is condition ? valueIfTrue : valueIfFalse."],
+["In the expression x = (y > z) ? y : z, what value is assigned to x if y is greater than z?",["z","true","y","false"],"C","When the condition is true, the expression returns y."],
+["Which category of operators has the highest precedence according to the precedence table?",["Unary operators","[] , ()","Multiplicative operators","Assignment operators"],"B","Parentheses and brackets have the highest precedence because they explicitly group expressions."],
+["According to precedence rules, which operators are evaluated first: Additive (+, -) or Multiplicative (*, /, %)?",["Additive","Multiplicative","Both have equal precedence","Depends on the operands"],"B","Multiplicative operators are evaluated before additive operators."],
+["Which category of operators has the lowest precedence in Java?",["Assignment","Conditional","Logical","Bitwise"],"A","Assignment operators are evaluated last in an expression."],
+["What is a combination of variables, constants, literals, and operators that produces a single value called?",["Statement","Expression","Keyword","Function"],"B","An expression evaluates to a single value."],
+["In Java, what character turns an expression into an expression statement?",["Colon (:)","Period (.)","Semicolon (;)","Comma (,)"],"C","A semicolon terminates an expression statement."],
+["What type of expression returns a numeric value based on the operators and operands used?",["Arithmetic Expression","Logical Expression","Relational Expression","Conditional Expression"],"A","Arithmetic expressions evaluate to numeric values."],
+["What type of expression compares values using relational operators?",["Assignment Expression","Relational Expression","Conditional Expression","Shift Expression"],"B","Relational expressions evaluate comparative conditions."],
+["What type of expression is boolean result = (j < k) && (k < 4);?",["Arithmetic Expression","Logical Expression","Conditional Expression","Shift Expression"],"B","This uses logical AND to combine boolean comparisons."],
+["What type of expression uses the ?: operator to assign a value based on a condition?",["Relational Expression","Assignment Expression","Conditional Expression","Logical Expression"],"C","The conditional operator is the ?: expression."],
+];// Mathematics question bank.
 const mathQuestions = [
   ["What is the value of 12 + 8 × 3?",["36","60","28","24"],"B","Multiplication comes before addition, so 8 × 3 = 24 and 12 + 24 = 36."],
   ["Find the remainder when 49 is divided by 6.",["1","3","4","5"],"C","49 ÷ 6 = 8 remainder 1."],
@@ -644,9 +637,9 @@ if (!saveMessage) {
   document.getElementById("submissionLoading").style.display="none";
   document.getElementById("result").style.display="block";
   document.getElementById("resultText").innerHTML=
-    `<div class="score">${points} / 80</div>
-     <p><strong>Multiple-choice:</strong> ${correct} correct out of 40. ${answered} item(s) answered.</p>
-     <p class="success">Your score is based on 40 multiple-choice items worth 2 points each.</p>
+    `<div class="score">${points} / 70</div>
+     <p><strong>Multiple-choice:</strong> ${correct} correct out of 35. ${answered} item(s) answered.</p>
+     <p class="success">Your score is based on 35 multiple-choice items worth 2 points each.</p>
      ${saveMessage?`<p class="warning"><strong>Save status:</strong> ${saveMessage}</p>`:"<p class=\"success\"><strong>Save status:</strong> Result saved successfully.</p>"}`;
   document.getElementById("review").innerHTML = review.length
     ? `<h3>Items to Review</h3>${review.map(x=>`<div class="wrong">Item ${x.n}: your answer <strong>${x.selected}</strong> • correct answer <strong>${x.correct}</strong><br>${questions[x.n-1][3]}</div>`).join("")}`
